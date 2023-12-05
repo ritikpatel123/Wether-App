@@ -52,18 +52,18 @@ const TemperatureChart = () => {
 
   const fetchLocationBasedData = async () => {
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
       let location;
 
       if (locationInput) {
-        // Manual location input
+      
         location = await Location.geocodeAsync(locationInput);
         if (!location.length) {
           setErrorMessage("Invalid location");
           return;
         }
       } else {
-        // Fetch data based on current location
+      
         const { coords } = await Location.getCurrentPositionAsync();
         location = [{ latitude: coords.latitude, longitude: coords.longitude }];
       }
@@ -72,20 +72,20 @@ const TemperatureChart = () => {
       const longitude = location[0].longitude;
 
       const apiKey = "f14f07628f1e13b07ec75e0c98e0df94";
-      // Construct API URLs for current and historical data
+
       const currentTemperatureURL = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
       const historicalDataURL = `https://archive-api.open-meteo.com/v1/archive?latitude=${latitude}&longitude=${longitude}&start_date=2023-12-03&end_date=2023-12-03&hourly=temperature_2m`;
 
-      // Fetch current temperature data
+ 
       const currentTemperatureResponse = await axios.get(currentTemperatureURL);
       const currentTemp = currentTemperatureResponse.data.main.temp;
       setCurrentTemperature(currentTemp);
 
       console.log(currentTemp);
 
-      // Fetch historical temperature data
+ 
       const currentTime = new Date().getTime();
-      const periodBeforeCurrentTime = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+      const periodBeforeCurrentTime = 24 * 60 * 60 * 1000;
       const historicalDataResponse = await axios.get(historicalDataURL);
 
       const newHistoricalData = historicalDataResponse.data.hourly.time
